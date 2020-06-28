@@ -8,8 +8,10 @@ import {
   exportTypeInterfaceDefault,
   exportTypeNameDefault,
   quoteTypeDefault,
+  logLevelDefault,
   EXPORT_TYPES,
-  QUOTE_TYPES
+  QUOTE_TYPES,
+  LOG_LEVELS
 } from "./typescript";
 import { main } from "./main";
 import { IMPLEMENTATIONS, getDefaultImplementation } from "./implementations";
@@ -51,6 +53,7 @@ const { _: patterns, ...rest } = yargs
     "$0 src/**/*.scss -e default --quoteType double",
     "Use double quotes around class name definitions rather than single quotes."
   )
+  .example("$0 src/**/*.scss --logLevel error", "Output only errors")
   .demandCommand(1)
   .option("aliases", {
     coerce: (obj): Aliases => obj,
@@ -135,6 +138,13 @@ const { _: patterns, ...rest } = yargs
     alias: "q",
     describe:
       "Specify the quote type so that generated files adhere to your TypeScript rules."
+  })
+  .option("logLevel", {
+    string: true,
+    choices: LOG_LEVELS,
+    default: logLevelDefault,
+    alias: "L",
+    describe: "Verbosity level of console output"
   }).argv;
 
 main(patterns[0], { ...rest });
